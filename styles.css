@@ -1,0 +1,505 @@
+:root {
+  --title-fg: #5A0014;
+  --brand-pink: #f8e8ec;
+  --accent-burgundy: #5A0014;
+  --accent-burgundy-dark: #400010;
+  --header-height: 140px;
+  --footer-height: 64px;
+  --bg:#ffffff;
+  --text:#1a1a1a;
+  --muted:#8a8fa3;
+  --border:#e3e5ea;
+  --panel:#f6f7fb;
+
+  /* Availability (solid colors) */
+  --green:#00a000;   /* Available (solid green) */
+  --red:#ff0000;     /* Unavailable (solid red) */
+
+  /* Past/other gray */
+  --muted-bg:#e6e8ef;  /* Light gray background */
+  --past-bg:#d9dbe3;   /* Slightly darker gray for past days */
+  --past-text:#000000; /* Black font for past days */
+
+  /* Layout */
+  --radius:12px;
+  --shadow:0 10px 28px rgba(16,24,40,0.08);
+}
+
+/* Reset & base */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+html, body {
+  margin: 0;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color:var(--text);
+  background:var(--bg);
+  line-height: 1.5;
+}
+
+/* Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #f8e8ec;
+}
+.title-bar {
+  background: #f8e8ec;
+  color: var(--title-fg);
+  font-weight: bold;
+  font-size: clamp(1rem, calc(0.5rem + 1vw), 2.5rem);
+  text-align: center;
+  padding: 10x;
+}
+.site-title {
+  margin: 0;
+}
+
+/* Navigation (5 across, dynamic sizing) */
+.top-nav {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 12px;
+}
+.nav-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-btn {
+  display: block;
+  text-align: center;
+  padding: clamp(6px, 1.2vw, 12px) clamp(6px, 1.5vw, 14px);
+  border: 2px solid var(--accent-burgundy);
+  color: var(--accent-burgundy);
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: clamp(12px, 1.8vw, 18px);
+  line-height: 1.1;
+  transition: background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease;
+   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.nav-btn:hover {
+  background: rgba(90, 0, 20, .08);
+}
+.nav-btn.active,
+.nav-btn[aria-current="page"] {
+  background: var(--accent-burgundy-dark);
+  color: #fff;
+  border-color: var(--accent-burgundy-dark);
+}
+.nav-btn.active::before,
+.nav-btn[aria-current="page"]::before {
+  font-family: "Font Awesome 6 Free"; /* Font Awesome family */
+  font-weight: 900; /* Solid style */
+  content: "\f1b0"; /* Paw icon Unicode for Font Awesome */
+  margin-right: 8px;
+  font-size: 17px;
+  color: #fff; /* White paw */
+}
+
+/* Hero */
+.main {
+  min-height: calc(100dvh - var(--header-height) - var(--footer-height));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  gap: 16px;
+}
+.hero-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+}
+.hero-image {
+  width: 100%;
+  height: clamp(500px, 35vh, 800px); /* Dynamic height: min 200px, max 350px */
+  border-radius: 25px;
+  display: block;
+  object-fit: cover;
+  opacity: 0.85;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 0 1rem;
+  pointer-events: none;
+}
+.hero-overlay-bg {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  display: inline-block;
+  opacity: 0;
+  animation: fadeIn 1.5s ease forwards;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hero-title,
+.hero-subtitle {
+  color: #fff;
+}
+.hero-title {
+  font-size: clamp(1.75rem, 4.5vw, 3rem);
+  font-weight: 800;
+  margin: 0 0 .25rem;
+}
+.hero-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Section Divider (wider + dynamic width + subtle shadow) */
+.section-divider {
+  width: clamp(60%, 80%, 95%);
+  max-width: 1200px;
+  height: 6px;
+  background: var(--accent-burgundy);
+  border-radius: 999px;
+  margin: 32px auto;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Section titles centered to the page */
+.sectionheader {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: var(--accent-burgundy);
+  font-weight: bold;
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  margin: 16px auto;
+}
+
+.section-header {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: var(--accent-burgundy);
+  font-weight: bold;
+  font-size: clamp(1.25rem, 2.2vw, 2rem);
+  margin: 16px auto;
+}
+
+.section-content{
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  grid-template-areas: "image table";
+  gap: 1rem;
+  padding: 1.25rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Lay out the row and center the whole pair */
+.about-flex {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;      /* center the pair on the page */
+  gap: 16px;                    /* small, consistent space between image and text */
+  margin: 20px 0;
+}
+
+/* Bigger image but capped responsively so it doesn't dominate */
+.about-img {
+  width: min(480px, 45vw);      /* responsive cap: 480px or 45% of viewport */
+  height: auto;
+  border-radius: 20px;
+  opacity: 0.95;
+  background: transparent;
+  box-shadow: 0 2px 16px rgba(90,0,20,0.10);
+  display: block;
+}
+
+/* Pink text box—wider than before, centered text, but no auto margins */
+.about-text {
+  background: #f8e8ec;
+  color: var(--accent-burgundy, #5A0014);
+  font-weight: 600;
+  padding: 28px 32px;
+  border-radius: 25px;
+  max-width: min(620px, 48vw);  /* wider, but still responsive */
+  min-width: 320px;
+  text-align: center;
+  font-size: 1.15rem;
+  box-shadow: 0 2px 16px rgba(90,0,20,0.08);
+
+  /* IMPORTANT: remove auto-centering that was pushing it away from the image */
+  margin: 0;                    /* <-- this replaces `margin: 0 auto;` */
+}
+
+.story-text {
+  background: #f8e8ec;
+  color: var(--accent-burgundy, #5A0014);
+  font-weight: 600;
+  padding: 28px 32px;
+  border-radius: 25px;
+  max-width: min(1280px, 75vw);
+  min-width: 320px;
+  text-align: center;
+  font-size: 1.15rem;
+  box-shadow: 0 2px 16px rgba(90,0,20,0.08);
+
+  margin: 0;
+}
+
+/* ---------- Table Styling ---------- */
+.info-table{
+  width:100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius:12px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.info-table thead th{
+  background:var(--accent-burgundy);
+  color:#fff;
+  padding:.75rem .9rem;
+  text-align:center;
+  font-weight:700;
+  border:2px solid var(--accent-burgundy);
+  border-left-width:0;
+  border-right-width:0;
+}
+
+.info-table tbody th,
+.info-table tbody td{
+  padding:.75rem .9rem;
+  text-align:center;
+  border:2px solid var(--accent-burgundy);
+  border-left-width:0;
+  border-right-width:0;
+}
+
+.info-table tbody th{
+  font-weight:700;
+  color:#5a1a25;
+}
+
+.info-table tbody tr:nth-child(odd){ background:#fff; }
+.info-table tbody tr:nth-child(even){ background:var(--brand-pink); }
+
+/* Stack on smaller screens and keep comfortable widths */
+@media (max-width: 560px) {
+  .about-flex { 
+    flex-direction: column; 
+    gap: 12px; 
+  }
+  .about-img {
+	margin-right: 4px;
+  }
+  .about-text { 
+    max-width: 92vw; 
+    width: 100%; 
+  }
+  .info-table colgroup col {
+	width: 50% !important;
+  }
+  .info-table {
+	font-size: 0.95rem;
+  }
+}
+
+/* Calendar CSS */
+.calendar-page{
+  max-width:860px;
+  margin:5vh auto;
+  padding:24px;
+}
+
+.calendar-header{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:16px;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.calendar-title h1{
+  margin:0;
+  font-size:clamp(20px,4vw,28px);
+  letter-spacing:.2px;
+}
+
+.hint{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:.95rem;
+}
+
+.btn{
+  appearance:none;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  padding:10px 16px;
+  border-radius:999px;
+  box-shadow:0 1px 0 rgba(0,0,0,.03);
+  cursor:pointer;
+  font-weight:600;
+  transition:transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+.btn:hover:not(:disabled){
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  border-color:#c8cbd3;
+}
+.btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.calendar-container{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.calendar-grid{
+  display:grid;
+  grid-template-rows:auto 1fr;
+}
+
+.calendar-weekdays{
+  display:grid;
+  grid-template-columns:repeat(7, 1fr);
+  background:#fff;
+  border-bottom:1px solid var(--border);
+}
+.calendar-weekdays span{
+  text-align:center;
+  padding:10px 0;
+  font-weight:700;
+  color:var(--muted);
+  font-size:.92rem;
+}
+
+.calendar-days{
+  display:grid;
+  grid-template-columns:repeat(7, 1fr);
+  gap:6px;
+  padding:12px;
+  min-height:360px;
+  /* Small smoothing hint for WAAPI animations */
+  will-change: transform, opacity;
+}
+
+/* Day cells */
+.day{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:60px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#fff;
+  color:#ffffff;            /* default numbers appear white on colored cells */
+  font-weight:700;
+  text-align:center;
+  transition:box-shadow 120ms ease, transform 120ms ease, border-color 120ms ease, background 120ms ease, color 120ms ease;
+}
+.day:hover{
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+  transform:translateY(-1px);
+}
+
+/* Availability colors (solid) */
+.day.available{
+  background:var(--green);
+  border-color:#008600;
+  color:#ffffff;
+}
+.day.unavailable{
+  background:var(--red);
+  border-color:#cc0000;
+  color:#ffffff;
+}
+
+/* Past days: always gray with black font — override everything else */
+.day.past{
+  background:var(--past-bg) !important;
+  color:var(--past-text) !important;
+  border-color:var(--border) !important;
+}
+
+/* Optional visual accent for 'today' (kept minimal; no star) */
+.day.today{
+  outline:2px solid rgba(0,0,0,.06);
+  outline-offset:2px;
+}
+
+/* Legend */
+.legend{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:14px 4px;
+  color:var(--muted);
+  font-weight:600;
+}
+.dot{
+  display:inline-block;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  margin-right:6px;
+  border:1px solid var(--border);
+  vertical-align:middle;
+}
+.dot-green{ background:var(--green); border-color:#008600; }
+.dot-red{   background:var(--red);   border-color:#cc0000; }
+.dot-muted{ background:var(--muted-bg); border-color:var(--border); }
+
+@media (max-width:520px){
+  .calendar-days{ gap:4px; padding:10px; }
+  .day{ height:48px; font-weight:700; }
+}
+
+/* Footer */
+.site-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  color: var(--title-fg);
+  text-align: center;
+  padding: 16px;
+  border-top: 1px solid #ddd;
+}
+.footer-contact {
+  margin-bottom: 8px;
+  color: var(--accent-burgundy);
+  font-weight: 700;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mellow Mutts</title>
+  <meta name="description" content="Mellow Mutts — friendly, local dog daycare." />
+  
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="slideshow.css" />
+
+  <script src="slideshow.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="title-bar"><h1 class="site-title">Mellow Mutts</h1></div>
+
+  <!-- ✅ Proper nav links (no #) -->
+  <nav class="top-nav" aria-label="Primary">
+    <ul class="nav-list">
+      <li><a class="nav-btn" href="index.html">Home</a></li>
+      <li><a class="nav-btn" href="about.html">Mellow Mutts Story</a></li>
+      <li><a class="nav-btn" href="services.html">Services & Rates</a></li>
+      <li><a class="nav-btn" href="calendar.html">Calendar</a></li>
+      <li><a class="nav-btn" href="contact.html">Contact Us</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- Home / Hero -->
+<main id="home" class="main">
+  <div class="hero-wrap">
+    <img src="images/TailsWagging.jpeg" alt="Mellow Mutts — happy dogs at play" class="hero-image" />
+    <div class="hero-overlay">
+      <div class="hero-overlay-bg">
+        <h2 class="hero-title">Happy Pups, Happy Owners</h2>
+        <p class="hero-subtitle">Trusted dog daycare for loving care and playtime.</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="section-divider"></div>
+
+<section id="about">
+  <h2 class="section-header">About Mellow Mutts</h2>
+    <div class="about-flex">
+    <img src="Images/Besties.jpeg" alt="About Mellow Mutts" class="about-img" />
+
+    <div class="about-text">
+      Hi, I'm <b>Emily</b>, founder of <b>Mellow Mutts</b>, where pets are cared for like family.  With over 20 years of experience, I'm passionate about giving every dog and cat the love, patience, and attention they deserve.  Whether it's walks, drop-ins, or overnight stays, I make sure your pets feel safe, happy, and right at home.  Serving <b>Indianapolis and surrounding areas</b>, my goal is to give you peace of mind knowing your furry family is in caring, trustworthy hands.
+    </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-contact">
+    Phone — 720.375.2556 | Email — eniedzie@gmail.com
+  </div>
+  © 2025 Mellow Mutts
+</footer>
+
+<script>
+/* Set anchor offsets using actual header/footer heights (kept for future use) */
+function setLayoutVars(){
+  const header = document.querySelector('.site-header');
+  const footer = document.querySelector('.site-footer');
+  document.documentElement.style.setProperty('--header-height', `${header?.offsetHeight || 140}px`);
+  document.documentElement.style.setProperty('--footer-height', `${footer?.offsetHeight || 64}px`);
+}
+setLayoutVars();
+addEventListener('resize', setLayoutVars);
+
+/* ✅ Active nav based on current URL (works across all pages) */
+(function setActiveNav(){
+  const links = document.querySelectorAll('.nav-btn');
+  const here = window.location.pathname.split('/').pop().toLowerCase() || 'index2.html';
+  links.forEach(a => {
+    const target = a.getAttribute('href').toLowerCase();
+    if (target === here || (here === '' && target.endsWith('index2.html'))) {
+      a.classList.add('active');
+      a.setAttribute('aria-current','page');
+    } else {
+           a.classList.remove('active');
+      a.removeAttribute('aria-current');
+    }
+  });
+})();
+</script>
+
+slideshow.js</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    new MellowSlideshow({
+      container: '#mellow-slideshow',
+      thumbs: '#mellow-thumbs',
+      basePath: 'Images/', // Use leading slash for site root
+      files: [
+        'Any Requests.jpeg',
+		'Besties.jpeg',
+		'Blankets1.jpeg',
+		'Blankets2.jpeg',
+		'CarRide.jpeg',
+		'Dog Mom.jpeg',
+		'Dogapalooza.jpeg',
+		'Doggy Momma.jpeg',
+		'Getting their steps in.jpeg',
+		'Goin to the park.jpeg',
+		'Hey dogs, look over here.jpeg',
+		'Hiking and a waterfall.jpeg',
+		'HoldingPuppy1.jpeg',
+		'HoldingPuppy2.jpeg',
+		'HoldingPuppy3.jpeg',
+		'I made it to the top.jpeg',
+		'I swear I heard something.jpeg',
+		'Its a party.jpeg',
+		'Lego puppies.jpeg',
+		'Lets go swimming.jpeg',
+		'Look at this kitty.jpeg',
+		'Look at this Photograph.jpeg',
+		'Movie time.jpeg',
+		'Puppies and flowers.jpeg',
+		'Puppies and yoga.jpeg',
+		'Puppies in da park.jpeg',
+		'Puppies needed a nap.jpeg',
+		'Puppies on a walk.jpeg',
+		'Puppies on the couch.jpeg',
+		'Puppies posing.jpeg',
+		'PuppiesOnTopOfTheWorld.jpeg',
+		'Puppy art.jpeg',
+		'Puppy Carriage.jpeg',
+		'Puppy day care.jpeg',
+		'Puppy Hugs.jpeg',
+		'Puppy Naps.jpeg',
+		'Puppy Party 1.jpeg',
+		'Puppy Party 2.jpeg',
+		'Puppy Party 3.jpeg',
+		'Puppy pic time.jpeg',
+		'Puppy Relaxation.jpeg',
+		'Puppy Selfie.jpeg',
+		'PuppyParty4.jpeg',
+		'River hike.jpeg',
+		'Sitting1.jpeg',
+		'Small puppy love 1.jpeg',
+		'Steppin on the beach.jpeg',
+		'TailsWagging.jpeg',
+		'These puppies are on a mission.jpeg',
+		'They all looked at the camera.jpeg',
+		'They see me rollin.jpeg',
+		'This is my toy.jpeg',
+		'Tired puppy.jpeg',
+		'Too many dogs, NAH.jpeg',
+		'Uh Oh - We are cartoons now.jpeg',
+		'Walking the puppies.jpeg',
+		'Why does he get a hug.jpeg',
+		'You are a small dog.jpeg',
+      ],
+      interval: 3000,
+      autoplay: true
+    });
+  });
+</script>
+</body>

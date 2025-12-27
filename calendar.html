@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calendar - Mellow Mutts</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="title-bar"><h1 class="site-title">Mellow Mutts</h1></div>
+  <nav class="top-nav" aria-label="Primary">
+    <ul class="nav-list">
+      <li><a class="nav-btn" href="index.html">Home</a></li>
+      <li><a class="nav-btn" href="about.html">Mellow Mutts Story</a></li>
+      <li><a class="nav-btn" href="services.html">Services & Rates</a></li>
+      <li><a class="nav-btn" href="calendar.html">Calendar</a></li>
+      <li><a class="nav-btn" href="contact.html">Contact Us</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="calendar-page">
+    <header class="calendar-header">
+      <div class="calendar-title" aria-live="polite" aria-atomic="true">
+        <h1 id="monthLabel">Loading</h1>
+        <p id="monthRangeHint" class="hint"></p>
+      </div>
+      <div class="calendar-controls">
+        <button id="prevBtn" class="btn" aria-label="Previous month">Previous</button>
+        <button id="nextBtn" class="btn" aria-label="Next month">Next</button>
+      </div>
+    </header>
+
+    <section class="calendar-container" aria-label="Availability calendar">
+      <div class="calendar-grid" role="grid" aria-readonly="true">
+        <div class="calendar-weekdays" role="row">
+          <span role="columnheader">Sun</span>
+          <span role="columnheader">Mon</span>
+          <span role="columnheader">Tue</span>
+          <span role="columnheader">Wed</span>
+          <span role="columnheader">Thu</span>
+          <span role="columnheader">Fri</span>
+          <span role="columnheader">Sat</span>
+        </div>
+        <div id="calendarDays" class="calendar-days" role="rowgroup"></div>
+      </div>
+    </section>
+
+    <footer class="legend">
+      <span class="dot dot-green" aria-hidden="true"></span> Available
+      <span class="dot dot-red" aria-hidden="true"></span> Unavailable
+      <span class="dot dot-muted" aria-hidden="true"></span> Past
+    </footer>
+  </main>    
+
+<footer class="site-footer">
+  <div class="footer-contact">
+    Phone — 720.375.2556 | Email — eniedzie@gmail.com
+  </div>
+  © 2025 Mellow Mutts
+</footer>
+
+<script>
+  (function setActiveNav() {
+    const links = document.querySelectorAll('.nav-btn');
+    const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+
+    links.forEach(link => {
+      const href = link.getAttribute('href').toLowerCase();
+      if (href === currentPage || (currentPage === '' && href.endsWith('index2.html'))) {
+        link.classList.add('active');
+        link.setAttribute('aria-current', 'page');
+      } else {
+        link.classList.remove('active');
+        link.removeAttribute('aria-current');
+      }
+    });
+  })();
+
+  // ---------------------
+  // Configuration
+  // ---------------------
+  const CONFIG = {
+    EXPLICIT_ONLY: true,          // true = only code-set dates are unavailable; otherwise available
+    USE_LOCAL_STORAGE: true,      // persist unavailable list across reloads
+    MAX_MONTHS_AHEAD: 12          // how far forward you can navigate
+  };
+
+  // ---------------------
+  // Helpers
+  // ---------------------
+  const fmtIso = (y, m, d) => `${String(y)}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+  const isWeekend = (date) => { const d = date.getDay(); return d === 0 || d === 6; };
+  const uniq = (arr) => Array.from(new Set(arr)).sort();
+
+  const LS_KEY_UNAVAILABLE = 'availability.unavailable';
+  const loadUnavailable = () => {
+    if (!CONFIG.USE_LOCAL_STORAGE) return [];
+    try {
+      const raw = localStorage.getItem(LS_KEY_UNAVAILABLE);
+      return raw ? JSON.parse(raw) : [];
+    } catch { return []; }
+  };
+  const saveUnavailable = (list) => {
+    if (!CONFIG.USE_LOCAL_STORAGE) return;
+    localStorage.setItem(LS_KEY_UNAVAILABLE, JSON.stringify(uniq(list)));
+  };
+
+  // ---------------------
+  // Public API (code-only control)
+  // ---------------------
+  let unavailableDates = loadUnavailable(); // ISO strings: YYYY-MM-DD
+
+  // Add single dates
+  window.setUnavailableDates = function(dates) {
+    unavailableDates = uniq([ ...(unavailableDates || []), ...dates ]);
+    saveUnavailable(unavailableDates);
+    render('none');
+  };
+
+  // Add inclusive ranges: [[startIso, endIso], ...]
+  window.setUnavailableRanges = function(ranges) {
+    const expanded = [];
+    for (const [start, end] of ranges) {
+      const s = new Date(start), e = new Date(end);
+      if (isNaN(s) || isNaN(e) || s > e) continue;
+      const cur = new Date(s);
+      while (cur <= e) {
+        expanded.push(fmtIso(cur.getFullYear(), cur.getMonth() + 1, cur.getDate()));
+        cur.setDate(cur.getDate() + 1);
+      }
+    }
+    unavailableDates = uniq([ ...(unavailableDates || []), ...expanded ]);
+    saveUnavailable(unavailableDates);
+    render('none');
+  };
+
+  // Replace full list
+  window.replaceUnavailable = function(dates) {
+    unavailableDates = uniq(dates);
+    saveUnavailable(unavailableDates);
+    render('none');
+  };
+
+  // Clear all
+  window.clearUnavailable = function() {
+    unavailableDates = [];
+    saveUnavailable(unavailableDates);
+    render('none');
+  };
+
+  // ---------------------
+  // Calendar state & DOM
+  // ---------------------
+  const today        = new Date();
+  const midnightToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const TODAY_ISO     = fmtIso(today.getFullYear(), today.getMonth() + 1, today.getDate());
+  const baseYear      = today.getFullYear();
+  const baseMonth     = today.getMonth(); // 0..11
+  let offset          = 0;                // 0 = current month
+
+  const monthLabelEl     = document.getElementById('monthLabel');
+  const monthRangeHintEl = document.getElementById('monthRangeHint');
+  const daysEl           = document.getElementById('calendarDays');
+  const nextBtn          = document.getElementById('nextBtn');
+  const prevBtn          = document.getElementById('prevBtn');
+
+  nextBtn.addEventListener('click', () => {
+    if (offset < CONFIG.MAX_MONTHS_AHEAD) {
+      offset += 1;
+      render('next');
+    }
+  });
+
+  prevBtn.addEventListener('click', () => {
+    if (offset > 0) {
+      offset -= 1;
+      render('prev');
+    }
+  });
+
+  // ---------------------
+  // Rendering + Animation
+  // ---------------------
+  function render(direction = 'none') {
+    const target = new Date(baseYear, baseMonth + offset, 1);
+    const year   = target.getFullYear();
+    const month  = target.getMonth(); // 0..11
+
+    monthLabelEl.textContent = `${target.toLocaleString(undefined, { month: 'long' })} ${year}`;
+    monthRangeHintEl.textContent = `Navigate current month and up to ${CONFIG.MAX_MONTHS_AHEAD} month(s) ahead.`;
+    prevBtn.disabled = offset === 0;
+    nextBtn.disabled = offset === CONFIG.MAX_MONTHS_AHEAD;
+
+    // Animate out (quick fade/slide) BEFORE content switch
+    if (direction !== 'none') {
+      daysEl.animate(
+        [
+          { opacity: 1, transform: 'translateY(0)' },
+          { opacity: 0, transform: 'translateY(8px)' }
+        ],
+        { duration: 160, easing: 'ease-out' }
+      );
+    }
+
+    // Clear and rebuild ONLY current month days
+    daysEl.innerHTML = '';
+
+    const firstDayIdx = new Date(year, month, 1).getDay();   // 0=Sun..6=Sat
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const cell = createDayCell(year, month, d);
+      if (d === 1 && firstDayIdx > 0) {
+        // Align first day under correct weekday column
+        cell.style.gridColumnStart = String(firstDayIdx + 1);
+      }
+      daysEl.appendChild(cell);
+    }
+
+    // Animate in (subtle fade/slide) AFTER content switch
+    if (direction !== 'none') {
+      daysEl.animate(
+        [
+          { opacity: 0, transform: 'translateY(-8px)' },
+          { opacity: 1, transform: 'translateY(0)' }
+        ],
+        { duration: 180, easing: 'ease-out' }
+      );
+    }
+  }
+
+  function createDayCell(year, month, day) {
+    const displayDate = new Date(year, month, day);
+    const iso         = fmtIso(displayDate.getFullYear(), displayDate.getMonth() + 1, displayDate.getDate());
+    const isToday     = iso === TODAY_ISO;
+    const isPast      = displayDate < midnightToday;
+
+    // Availability decision:
+    // Past days always render as gray/black (override)
+    // For today & future:
+    //   - available (green) unless explicitly set red in EXPLICIT_ONLY mode
+    //   - if EXPLICIT_ONLY=false, weekends are unavailable by default
+    let available;
+    if (CONFIG.EXPLICIT_ONLY) {
+      available = !unavailableDates.includes(iso);
+    } else {
+      available = !isWeekend(displayDate) && !unavailableDates.includes(iso);
+    }
+
+    const cell = document.createElement('div');
+    const classes = ['day'];
+
+    if (isPast) {
+      classes.push('past');
+    } else {
+      classes.push(available ? 'available' : 'unavailable');
+    }
+
+    if (isToday) {
+      classes.push('today'); // hook if you want a special ring or weight
+    }
+
+    cell.className = classes.join(' ');
+    cell.setAttribute('role', 'gridcell');
+    cell.setAttribute('aria-disabled', 'false');
+
+    const stateLabel = isPast ? 'Past' : (available ? 'Available' : 'Unavailable');
+    cell.setAttribute('aria-label', `${iso}, This month, ${stateLabel}`);
+    cell.textContent = String(displayDate.getDate());
+    return cell;
+  }
+
+  // ---------------------
+  // Initialize your unavailable dates
+  // ---------------------
+  replaceUnavailable([
+    '2025-12-24',
+    '2025-12-25',
+    '2025-12-31',
+    '2026-01-01',
+    '2026-03-17'
+  ]);
+
+  // Initial paint
+  render('none');
+</script>
+</body>
+</html>

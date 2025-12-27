@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>About Mellow Mutts</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="title-bar"><h1 class="site-title">Mellow Mutts</h1></div>
+  <nav class="top-nav" aria-label="Primary">
+    <ul class="nav-list">
+      <li><a class="nav-btn" href="index.html">Home</a></li>
+      <li><a class="nav-btn" href="about.html">Mellow Mutts Story</a></li>
+      <li><a class="nav-btn" href="services.html">Services & Rates</a></li>
+      <li><a class="nav-btn" href="calendar.html">Calendar</a></li>
+      <li><a class="nav-btn" href="contact.html">Contact Us</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="main">
+  <h2 class="section-header">About Mellow Mutts</h2>
+    <div class="story-text">
+      Hi, I'm <b>Emily</b>, the proud owner of <b>Mellow Mutts</b> - where happy tails and peace of mind come standard.<br><br>
+	  Carring for animals has been a lifelong passion of mine.  From the time I was ten years old helping with family pets, to now caring for dogs and cats all across Indianapolis.  I've always believed our pets deserve the same love, patience, and attention we give our family.  Over the past 20+ years, I've gained experience with everything from playful puppies to senior pets who need a gentler touch - even dogs requiring daily insulin or medication.<br><br>
+	  I know how hard it can be to leave your furry family member in someone else's care.  That's why my goal is always to make both pets and their people feel completely comfortable.  Whether it's daily walks, overnight stays, or drop- visits, I take time to understand each pet's unique personality, routines, and needs.  I treat every animal as if they were my own - with compassion, reliability, and a genuine love that shines through in every tail wag, cuddle, and purr.<br><br>
+	  Serving <b>Fall Creek Place and the greater Indianapolis area</b>, I'm dedicated to providing trustworthy, stress-free care so you can travel, work, or simply take a break knowing your beloved companion is in the best hands possible.<br><br>
+	  Because when your pets are happy, you can truly relax - and that's what <b>Mellow Mutts</b> is all about.
+    </div>
+  
+  <div class="section-divider"></div>
+  
+  <h2 class="section-header">Why choose Mellow Mutts?</h2>
+    <div class="about-flex">
+    <!-- Left: Transparent image -->
+    <img src="Images/Look at this Photograph.jpeg" alt="About Mellow Mutts" class="about-img" />
+	
+	<div class="about-text">
+      <i class="fa-solid fa-paw"></i>  20+ years of hands-on pet care experience<br>
+	  <i class="fa-solid fa-paw"></i>  Fully insured, reliable, and trustworthy<br>
+	  <i class="fa-solid fa-paw"></i>  Comfortable, loving care for pets of all ages and needs<br>
+	  <i class="fa-solid fa-paw"></i>  Daily updates with photos and messages while you're away<br>
+	  <i class="fa-solid fa-paw"></i>  Serving <b>Indianapolis (46205) and surrounding neighborhoods</b><br><br>
+	  Your pets deserve care as loving as your own - and at Mellow Mutts, that is exactly what they will get!!!
+    </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-contact">
+    Phone — 720.375.2556 | Email — eniedzie@gmail.com
+  </div>
+  © 2025 Mellow Mutts
+</footer>
+
+<script>
+(function setActiveNav() {
+  const links = document.querySelectorAll('.nav-btn');
+  const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+
+  links.forEach(link => {
+    const href = link.getAttribute('href').toLowerCase();
+    if (href === currentPage || (currentPage === '' && href.endsWith('index2.html'))) {
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.classList.remove('active');
+      link.removeAttribute('aria-current');
+    }
+  });
+})();
+</script>
+</body>
+</html>

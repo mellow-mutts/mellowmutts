@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact - Mellow Mutts</title>
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="title-bar"><h1 class="site-title">Mellow Mutts</h1></div>
+  <nav class="top-nav" aria-label="Primary">
+    <ul class="nav-list">
+      <li><a class="nav-btn" href="index2.html">Home</a></li>
+      <li><a class="nav-btn" href="about.html">Mellow Mutts Story</a></li>
+      <li><a class="nav-btn" href="services.html">Services & Rates</a></li>
+      <li><a class="nav-btn" href="calendar.html">Calendar</a></li>
+      <li><a class="nav-btn" href="contact.html">Contact Us</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main class="main">
+
+  <section id="email">
+    <h2 class="section-header">Email</h2>
+    
+    <div class="story-text">
+      Ready to give your furry friend the <b>VIP treatment</b>? We’re here for it!<br>To get started, just send us a message with details about your pet, which service you’re interested in, and the dates you have in mind. Easy as a walk around the block.<br>Contact <b>Mellow Mutts</b> at eniedzie@gmail.com—we can’t wait to meet your best friend!
+    </div>
+    
+  </section>
+
+  <div class="section-divider"></div>
+
+  <section id="phone">
+    <h2 class="section-header">Phone</h2>
+    
+    <div class="story-text">
+      Couch‑potato pup? Zoom‑champ? Stealth‑ninja kitty? We’ve got you covered!<br>Share your dog/cat’s details, the service you’re looking for, and your date range, and we’ll craft the perfect plan.<br>Text or call 720.375.2556 to book a spot!
+    </div>
+    
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-contact">
+    Phone — 720.375.2556 | Email — eniedzie@gmail.com
+  </div>
+  © 2025 Mellow Mutts
+</footer>
+
+<script>
+(function setActiveNav() {
+  const links = document.querySelectorAll('.nav-btn');
+  const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+
+  links.forEach(link => {
+    const href = link.getAttribute('href').toLowerCase();
+    if (href === currentPage || (currentPage === '' && href.endsWith('index2.html'))) {
+      link.classList.add('active');
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.classList.remove('active');
+      link.removeAttribute('aria-current');
+    }
+  });
+})();
+</script>
+</body>
+</html>
